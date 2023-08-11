@@ -2,6 +2,7 @@ package com.andr3ablanco.coffee.Controllers;
 
 
 import com.andr3ablanco.coffee.Entities.Cart;
+import com.andr3ablanco.coffee.Entities.Order;
 import com.andr3ablanco.coffee.Entities.Product;
 import com.andr3ablanco.coffee.Repositories.CartRepository;
 import com.andr3ablanco.coffee.Repositories.OrderRepository;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,11 +87,51 @@ public class CoreController {
 
 
     @GetMapping("/deleteItem") // This is the name that goes in the button not the one in the method
-    public String deteItem(Long id){
+    public String deleteItem(Long id){
 
         cartRepository.deleteById(id);
 
+        return "redirect:/cart"; // I need this for redirect but it's the same as /
+    }
+
+
+    @PostMapping("/editItem") // This is the name that goes in the button not the one in the method
+    @Transactional
+    public String editItem(Model model, @RequestParam("itemID") Long itemID,  @RequestParam("productID") Long productID, @RequestParam("qty") int qty, HttpSession session ) {
+        // calculate subtotal
+        //fin product price
+        Optional<Product> product = productRepository.findById(productID);
+        Optional<Cart> item = cartRepository.findById(itemID);
+
+        double unitPrice = product.get().getProductPrice();
+        double subtotal = unitPrice*qty;
+
+
+        cartRepository.updateItemInCart(item.get().getId(), qty, subtotal);
+
         return "redirect:/index"; // I need this for redirect but it's the same as /
     }
+
+
+    @GetMapping("/processOrder") // This is the name that goes in the button not the one in the method
+    @Transactional
+    public String processOrder(Model model, HttpSession session ) {
+        // calculate subtotal
+        //fin product price
+        List<Cart> product = cartRepository.findAll();
+
+        double total = cartRepository.getTotal();
+
+        Order newOrder = new Order(null, new Date(), total);
+
+        orderRepository.save(newOrder);
+
+
+
+
+        return "redirect:/index"; // I need this for redirect but it's the same as /
+    }
+
+
 
 }

@@ -65,13 +65,21 @@
         </thead>
         <tbody>
         <tr th:each="item : ${items}">
+
             <td th:text="${item.getId()}">ID</td>
             <td th:text="${item.getProductId()}">Category</td>
             <td th:text="${item.getProductName()}">Name</td>
             <td th:text="${item.getSubtotal()}">Price</td>
-            <td><input type="number" name="qty" th:value="${item.getProductQty()}"></input></td>
+            <td>
+                <form  method="post" th:action="@{editItem}">
+                    <input type="number" name="qty" th:value="${item.getProductQty()}"></input>
+                    <input type="hidden" name="itemID" th:value="${item.getId()}"></input>
+                    <input type="hidden" name="productID" th:value="${item.getProductId()}"></input>
+                <button type="submit" class="btn-primary" th:href="@{/cart}" >EDIT</button>
+                </form>
+            </td>
             <td><a class="btn btn-danger" onClick="return confirm('you want to delete this record?')" th:href="@{deleteItem(id=${item.getId()})}">DELETE</a></td>
-            <td><a class="btn btn-success" th:href="@{editItem(id=${item.id})}">Edit</a></td>
+
         </tr>
         </tbody>
       </table>
@@ -79,6 +87,7 @@
     </div>
   </div>
 
+    <a class="btn btn-primary" onClick="process?" th:href="@{processOrder}">PROCESS ORDER</a>
 </div>
 
 
