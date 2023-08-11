@@ -20,9 +20,11 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date orderDate;
+    private Long productId;
 
-    private double orderTotal;
+    private String productName;
+
+    private int productQty;
+
+    private double subtotal;
 }

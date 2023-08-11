@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="navbar">
+<head>
+    <meta charset="UTF-8">
+    <title>New Order</title>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+          integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+          crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+          crossorigin="anonymous"></script>
+
+  <!-- Include Bootstrap 4 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <!-- Include Bootstrap 4 JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+          crossorigin="anonymous"></script>
+
+
+  <style>
+    .pre-scrollable{
+      height:500px;
+      overflow-y:scroll;
+    }
+    h1 {
+      text-align: center;
+    }
+
+
+    .center-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh; /* Adjust to your needs */
+    }
+
+  </style>
+
+
+</head>
+<body>
+
+<div layout:fragment="content">
+
+
+  <div class="container mt-4 pre-scrollable">
+    <div class="card-header">Product List </div>
+    <div class="card-body">
+
+  <table class="table">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Category</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Qty</th>
+      <th scope="col">Add</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+      <form  method="post" th:action="@{addProductToCart}">
+      <td th:text="${product.getId()}">ID</td>
+      <td th:text="${product.getProductCategory()}">Category</td>
+      <td th:text="${product.getProductName()}">Name</td>
+      <td th:text="${product.getProductPrice()}">Price</td>
+      <td type="hidden" th:text="${product.getProductStock()}"></td>
+        <td><input type="number" name="qty"></input></td>
+      <td>
+        <input type="hidden" name="productID" th:value="${product.getId()}"></input>
+        <input type="hidden" name="productName" th:value="${product.getProductName()}"></input>
+        <button type="submit" class="btn-primary" th:href="@{/index}" >ADD</button></td>
+      </form>
+    </tr>
+    </tbody>
+  </table>
+
+      </div>
+    </div>
+
+</div>
+
+</body>
+</html>
